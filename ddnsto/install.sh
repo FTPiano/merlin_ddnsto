@@ -9,7 +9,9 @@ cp -rf /tmp/$MODULE/bin/* /koolshare/bin/
 cp -rf /tmp/$MODULE/scripts/* /koolshare/scripts/
 cp -rf /tmp/$MODULE/webs/* /koolshare/webs/
 cp -rf /tmp/$MODULE/res/* /koolshare/res/
+cp -rf /tmp/$MODULE/perp/* /koolshare/perp/
 rm -fr /tmp/ddnsto* >/dev/null 2>&1
+[ -x /koolshare/bin/perpctl ] && /koolshare/bin/perpctl -b /koolshare/perp -q X ${MODULE}
 killall ${MODULE}
 chmod +x /koolshare/bin/ddnsto
 chmod +x /koolshare/scripts/ddnsto_check.sh
@@ -17,6 +19,7 @@ chmod +x /koolshare/scripts/ddnsto_config.sh
 chmod +x /koolshare/scripts/ddnsto_status.sh
 chmod +x /koolshare/scripts/uninstall_ddnsto.sh
 [ ! -L "/koolshare/init.d/S70ddnsto.sh" ] && ln -sf /koolshare/scripts/ddnsto_config.sh /koolshare/init.d/S70ddnsto.sh
+chmod +x /koolshare/perp/${MODULE}/*
 sleep 1
 dbus set ${MODULE}_version="${VERSION}"
 dbus set ${MODULE}_title="${title}"

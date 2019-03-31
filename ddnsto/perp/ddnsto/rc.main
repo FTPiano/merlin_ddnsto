@@ -1,0 +1,12 @@
+#!/bin/sh
+eval `dbus export ddnsto`
+source /koolshare/scripts/base.sh
+BIN=/koolshare/bin/ddnsto
+exec 2>&1
+
+if test ${1} = 'start' ; then
+  killall -q $(basename "$BIN")
+  exec ${BIN} -u ${ddnsto_token}
+fi
+
+exit 0

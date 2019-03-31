@@ -3,6 +3,7 @@ eval `dbus export ddnsto_`
 source /koolshare/scripts/base.sh
 MODULE=ddnsto
 cd /tmp
+[ -x /koolshare/bin/perpctl ] && /koolshare/bin/perpctl -b /koolshare/perp -q X ${MODULE}
 killall ddnsto || true
 rm -rf /koolshare/init.d/S70ddnsto.sh
 rm -rf /koolshare/bin/ddnsto
@@ -12,6 +13,7 @@ rm -rf /koolshare/scripts/ddnsto_check.sh
 rm -rf /koolshare/scripts/ddnsto_config.sh
 rm -rf /koolshare/scripts/ddnsto_status.sh
 rm -rf /koolshare/webs/Module_ddnsto.asp
+rm -rf /koolshare/perp/${MODULE}
 rm -fr /tmp/ddnsto*
 cru d ddnsto_check >/dev/null 2>&1
 dbus remove __event__onnatstart_ddnsto

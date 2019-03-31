@@ -2,6 +2,7 @@
 eval `dbus export ddnsto`
 source /koolshare/scripts/base.sh
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
+export PERP_BASE=/koolshare/perp
 ntp_sync(){
     ntp_server=`nvram get ntp_server0`
     start_time="`date +%Y%m%d`"
@@ -29,14 +30,24 @@ ddnsto_nat_start(){
 onstart(){
     ntp_sync
     if [ "${ddnsto_enable}"x = "1"x ];then
-        killall ddnsto
-        ddnsto -u ${ddnsto_token} -d
-        ddnsto_cron_job
-        ddnsto_nat_start
+        if [ -d /koolshare/perp/ddnsto ]; then
+            (perpok ddnsto 2>/dev/null && perpctl X ddnsto) || true
+            perpctl A ddnsto
+        else
+            killall -q ddnsto
+            ddnsto -u ${ddnsto_token} -d
+            ddnsto_cron_job
+            ddnsto_nat_start
+        fi
     else
-        killall ddnsto
-        ddnsto_cron_job
-        ddnsto_nat_start
+        if [ -d /koolshare/perp/ddnsto ]; then
+            (perpok ddnsto 2>/dev/null && perpctl X ddnsto) || true
+            killall -q ddnsto
+        else
+            killall -q ddnsto
+            ddnsto_cron_job
+            ddnsto_nat_start
+        fi
     fi
 }
 
